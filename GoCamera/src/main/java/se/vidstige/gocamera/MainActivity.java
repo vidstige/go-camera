@@ -8,21 +8,21 @@ import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 
-    private Camera mCamera;
+    private Camera _camera;
+    private CameraPreview _preview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        _preview = (CameraPreview) findViewById(R.id.camera_preview);
     }
 
     @Override
     protected void onResume()
     {
-        mCamera = getCameraInstance();
-
-        CameraPreview preview = (CameraPreview) findViewById(R.id.camera_preview);
-        preview.setCamera(mCamera);
+        _camera = getCameraInstance();
+        _preview.setCamera(_camera);
 
         super.onResume();
     }
@@ -47,12 +47,11 @@ public class MainActivity extends Activity {
     }
 
     private void releaseCameraAndPreview() {
-        CameraPreview preview = (CameraPreview) findViewById(R.id.camera_preview);
-        preview.setCamera(null);
+        _preview.setCamera(null);
 
-        if (mCamera != null) {
-            mCamera.release();
-            mCamera = null;
+        if (_camera != null) {
+            _camera.release();
+            _camera = null;
         }
     }
 
