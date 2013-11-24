@@ -5,6 +5,9 @@ package se.vidstige.gocamera;
  */
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -14,6 +17,7 @@ import java.io.IOException;
 
 /** A basic Camera preview class */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+    private final Paint paint;
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private String TAG = "CameraPreview";
@@ -28,6 +32,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        paint = new Paint();
+        paint.setColor(Color.RED);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {

@@ -27,11 +27,12 @@ public class MainActivity extends Activity {
         // Create an instance of Camera
         mCamera = getCameraInstance();
 
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.removeView(mPreview);
+
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.removeAllViews();
-        preview.addView(mPreview);
+        preview.addView(mPreview, 0);
 
         super.onResume();
     }
@@ -41,17 +42,6 @@ public class MainActivity extends Activity {
     {
         releaseCameraAndPreview();
         super.onPause();
-    }
-
-    /** Check if this device has a camera */
-    private boolean checkCameraHardware(Context context) {
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-            // this device has a camera
-            return true;
-        } else {
-            // no camera on this device
-            return false;
-        }
     }
 
     /** A safe way to get an instance of the Camera object. */
@@ -66,24 +56,9 @@ public class MainActivity extends Activity {
         return c; // returns null if camera is unavailable
     }
 
-    private boolean safeCameraOpen(int id) {
-        boolean qOpened = false;
-
-        try {
-            releaseCameraAndPreview();
-            mCamera = Camera.open(id);
-            qOpened = (mCamera != null);
-        } catch (Exception e) {
-            Log.e(getString(R.string.app_name), "failed to open Camera");
-            e.printStackTrace();
-        }
-
-        return qOpened;
-    }
-
     private void releaseCameraAndPreview() {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.removeAllViews();
+        preview.removeView(mPreview);
 
         mPreview = null;
         if (mCamera != null) {
