@@ -14,7 +14,7 @@
             android:layout_height="fill_parent"
             android:layout_width="fill_parent" />
         <se.vidstige.gocamera.GoBanOverlay
-            android:id="@+id/overlay"
+            android:id="@+id/goban_overlay"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
     </FrameLayout>

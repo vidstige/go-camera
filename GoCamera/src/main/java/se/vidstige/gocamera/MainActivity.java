@@ -8,7 +8,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,6 +15,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private Camera _camera;
     private CameraPreview _preview;
+    private GoBanOverlay _gobanOverlay;
     private Sensor _gravitySensor;
     private SensorManager _sensorManager;
 
@@ -24,6 +24,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         _preview = (CameraPreview) findViewById(R.id.camera_preview);
+
+        _gobanOverlay = (GoBanOverlay) findViewById(R.id.goban_overlay);
 
         _sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         _gravitySensor = _sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -94,34 +96,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         return super.onOptionsItemSelected(item);
     }
 
-    private float dot(float[] a, float[] b)
-    {
-        return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
-    }
-
-    private float[] copy(float[] a)
-    {
-        float b[] = new float[3];
-        b[0] = a[0];
-        b[1] = a[1];
-        b[2] = a[2];
-        return b;
-    }
-
-    private void normalize(float[] a)
-    {
-        double l = Math.sqrt(dot(a, a));
-        a[0] /= l;
-        a[1] /= l;
-        a[2] /= l;
-    }
-
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        float up[] = { 0, 0 , 1f};
-        float gravity[] = copy(sensorEvent.values);
-        normalize(gravity);
-        Log.d("Angle", "a=" + Math.acos(dot(gravity, up)));
+        _gobanOverlay.setGravity(sensorEvent.values);
     }
 
     @Override
