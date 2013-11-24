@@ -6,10 +6,13 @@
     >
 
     <FrameLayout
-            android:id="@+id/camera_preview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1" >
+        <se.vidstige.gocamera.CameraPreview
+            android:id="@+id/camera_preview"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent" />
         <se.vidstige.gocamera.GoBanOverlay
             android:id="@+id/overlay"
             android:layout_width="fill_parent"

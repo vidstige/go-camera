@@ -1,13 +1,6 @@
 package se.vidstige.gocamera;
 
-/**
- * Created by vidstige on 11/24/13.
- */
-
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -17,14 +10,12 @@ import java.io.IOException;
 
 /** A basic Camera preview class */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
-    private final Paint paint;
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private String TAG = "CameraPreview";
 
-    public CameraPreview(Context context, Camera camera) {
+    public CameraPreview(Context context) {
         super(context);
-        mCamera = camera;
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
@@ -32,12 +23,17 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
 
-        paint = new Paint();
-        paint.setColor(Color.RED);
+    public void setCamera(Camera camera)
+    {
+        mCamera = camera;
+        requestLayout();
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
+        if (mCamera == null) return;
+
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
             mCamera.setPreviewDisplay(holder);
@@ -61,6 +57,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
 
         // stop preview before making changes
+        if (mCamera == null) return;
+
         try {
             mCamera.stopPreview();
         } catch (Exception e){
@@ -79,6 +77,4 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
     }
-
-
 }

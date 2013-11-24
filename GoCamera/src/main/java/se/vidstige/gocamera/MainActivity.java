@@ -1,19 +1,14 @@
 package se.vidstige.gocamera;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 public class MainActivity extends Activity {
 
     private Camera mCamera;
-    private CameraPreview mPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +19,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume()
     {
-        // Create an instance of Camera
         mCamera = getCameraInstance();
 
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.removeView(mPreview);
-
-        // Create our Preview view and set it as the content of our activity.
-        mPreview = new CameraPreview(this, mCamera);
-        preview.addView(mPreview, 0);
+        CameraPreview preview = (CameraPreview) findViewById(R.id.camera_preview);
+        preview.setCamera(mCamera);
 
         super.onResume();
     }
@@ -57,10 +47,9 @@ public class MainActivity extends Activity {
     }
 
     private void releaseCameraAndPreview() {
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.removeView(mPreview);
+        CameraPreview preview = (CameraPreview) findViewById(R.id.camera_preview);
+        preview.setCamera(null);
 
-        mPreview = null;
         if (mCamera != null) {
             mCamera.release();
             mCamera = null;
